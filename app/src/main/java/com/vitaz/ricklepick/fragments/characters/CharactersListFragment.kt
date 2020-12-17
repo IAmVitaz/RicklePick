@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.vitaz.ricklepick.R
 import com.vitaz.ricklepick.adapters.CharacterListAdapter
 import com.vitaz.ricklepick.viewmodel.CharactersViewModel
@@ -38,7 +39,8 @@ class CharactersListFragment : Fragment() {
 
         characterListRecyclerView.apply {
             adapter = charactersListAdapter
-            layoutManager = LinearLayoutManager(requireActivity())
+            layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
+
             itemAnimator = SlideInUpAnimator().apply{
                 addDuration = 300
             }

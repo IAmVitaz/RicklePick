@@ -3,6 +3,7 @@ package com.vitaz.ricklepick.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.vitaz.ricklepick.R
 import com.vitaz.ricklepick.model.Character
@@ -15,7 +16,8 @@ class CharacterListAdapter (var characters: ArrayList<Character>):
     fun updateCharacterList(newCharacters: List<Character>) {
         characters.clear()
         characters.addAll(newCharacters)
-        notifyItemRangeInserted(0, newCharacters.size-1)
+        notifyItemRangeInserted(0, characters.size-1)
+        //notifyDataSetChanged()
 
     }
 
@@ -32,7 +34,6 @@ class CharacterListAdapter (var characters: ArrayList<Character>):
             genderValue.text = character.gender
             imageView.loadImage(character.image)
 
-//            genderValue.loadImage(character.flag)
         }
     }
 
@@ -45,5 +46,11 @@ class CharacterListAdapter (var characters: ArrayList<Character>):
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(characters[position])
+
+        holder.itemView.characterListRowBackground.setOnClickListener {
+            holder.itemView.findNavController().navigate(R.id.action_charactersListFragment_to_characterDetailsFragment)
+        }
+
     }
+
 }
