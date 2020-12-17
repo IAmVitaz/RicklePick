@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.vitaz.ricklepick.R
+import com.vitaz.ricklepick.fragments.characters.CharactersListFragment
+import com.vitaz.ricklepick.fragments.characters.CharactersListFragmentDirections
 import com.vitaz.ricklepick.model.Character
 import com.vitaz.ricklepick.utils.loadImage
 import kotlinx.android.synthetic.main.item_character_list.view.*
@@ -48,7 +50,8 @@ class CharacterListAdapter (var characters: ArrayList<Character>):
         holder.bind(characters[position])
 
         holder.itemView.characterListRowBackground.setOnClickListener {
-            holder.itemView.findNavController().navigate(R.id.action_charactersListFragment_to_characterDetailsFragment)
+            val action = CharactersListFragmentDirections.actionCharactersListFragmentToCharacterDetailsFragment(characters[position])
+            holder.itemView.findNavController().navigate(action)
         }
 
     }
