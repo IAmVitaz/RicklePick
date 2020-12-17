@@ -7,7 +7,7 @@
     tools:context=".fragments.characters.CharacterDetailsFragment">
 
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView2"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -66,7 +66,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="fill_parent"
-                android:layout_height="300dp">
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/characterDetailsStatus"
@@ -264,8 +264,31 @@
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/characterDetailsLocationValue" />
+
+                <TextView
+                    android:id="@+id/characterDetailsEpisodes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Episodes:"
+                    android:textColor="@color/colorAccent"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/horisontalLine5" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/characterDetailsEpisodeRecyclerView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/guideline2"
+                    app:layout_constraintTop_toBottomOf="@+id/horisontalLine5" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

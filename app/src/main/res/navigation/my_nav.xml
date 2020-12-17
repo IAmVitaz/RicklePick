@@ -12,7 +12,11 @@
         tools:layout="@layout/fragment_main" >
         <action
             android:id="@+id/action_mainFragment_to_charactersList"
-            app:destination="@id/charactersListFragment" />
+            app:destination="@id/charactersListFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_mainFragment_to_locationsListFragment"
             app:destination="@id/locationsListFragment" />
@@ -27,7 +31,11 @@
         tools:layout="@layout/fragment_characters_list" >
         <action
             android:id="@+id/action_charactersListFragment_to_characterDetailsFragment"
-            app:destination="@id/characterDetailsFragment" />
+            app:destination="@id/characterDetailsFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/locationsListFragment"

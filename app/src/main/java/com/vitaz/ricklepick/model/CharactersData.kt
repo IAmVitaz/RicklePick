@@ -46,7 +46,7 @@ data class Character(
     val image: String?,
 
     @SerializedName("episode")
-    val episode: List<String>?
+    val episode: List<String>
 
 ): Parcelable
 

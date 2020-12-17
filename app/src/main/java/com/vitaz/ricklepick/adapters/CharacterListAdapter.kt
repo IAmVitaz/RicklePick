@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.vitaz.ricklepick.R
-import com.vitaz.ricklepick.fragments.characters.CharactersListFragment
 import com.vitaz.ricklepick.fragments.characters.CharactersListFragmentDirections
 import com.vitaz.ricklepick.model.Character
 import com.vitaz.ricklepick.utils.loadImage

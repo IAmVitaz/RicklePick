@@ -1,20 +1,20 @@
 package com.vitaz.ricklepick.fragments.characters
 
+import android.content.res.Resources
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.vitaz.ricklepick.R
+import com.vitaz.ricklepick.adapters.CharacterDetailsEpisodeListAdapter
 import com.vitaz.ricklepick.utils.loadImage
-import com.vitaz.ricklepick.viewmodel.CharacterDetailsViewModel
+import kotlinx.android.synthetic.main.fragment_character_details.*
 import kotlinx.android.synthetic.main.fragment_character_details.view.*
 
 class CharacterDetailsFragment : Fragment() {
-
-    lateinit var viewModel: CharacterDetailsViewModel
 
     private val args by navArgs<CharacterDetailsFragmentArgs>()
 
@@ -26,6 +26,21 @@ class CharacterDetailsFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_character_details, container, false)
 
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        //expand recyclerview and disable scrolling. works with NestedScrollView
+        characterDetailsEpisodeRecyclerView.isNestedScrollingEnabled = false
+        //populate episode recyclerview
+
+        characterDetailsEpisodeRecyclerView.apply {
+            adapter = CharacterDetailsEpisodeListAdapter(args.currentCharacter.episode)
+            layoutManager = StaggeredGridLayoutManager(getNumberOfRows(), StaggeredGridLayoutManager.VERTICAL)
+        }
+
         view.characterDetailsImageView.loadImage(args.currentCharacter.image)
         view.characterDetailsNameValue.text = checkStringForNull(args.currentCharacter.name)
         view.characterDetailsStatusValue.text = checkStringForNull(args.currentCharacter.status)
@@ -34,11 +49,6 @@ class CharacterDetailsFragment : Fragment() {
         view.characterDetailsOriginValue.text = checkStringForNull(args.currentCharacter.origin.name)
         view.characterDetailsLocationValue.text = checkStringForNull(args.currentCharacter.location.name)
         view.characterDetailsGender.setImageResource(getGenderResourceId(args.currentCharacter.gender))
-
-        viewModel = ViewModelProviders.of(this).get(CharacterDetailsViewModel::class.java)
-
-
-        return view
     }
 
     private fun checkStringForNull(item: String?): String {
@@ -58,6 +68,17 @@ class CharacterDetailsFragment : Fragment() {
             else -> "png_questionmark"
         }
         return  requireContext().resources.getIdentifier(imageName, "drawable", requireContext().packageName)
+    }
+
+    private fun getNumberOfRows(): Int {
+        val width = Resources.getSystem().getDisplayMetrics().widthPixels
+        val rows = when {
+            width < 500 -> 1
+            width in 500..999 -> 2
+            width in 1000..1999 -> 3
+            else -> 4
+        }
+        return rows
     }
 
 }

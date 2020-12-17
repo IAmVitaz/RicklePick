@@ -1,5 +1,6 @@
 package com.vitaz.ricklepick.fragments.characters
 
+import android.content.res.Resources
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -39,7 +40,7 @@ class CharactersListFragment : Fragment() {
 
         characterListRecyclerView.apply {
             adapter = charactersListAdapter
-            layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
+            layoutManager = StaggeredGridLayoutManager(getNumberOfRows(), StaggeredGridLayoutManager.VERTICAL)
 
             itemAnimator = SlideInUpAnimator().apply{
                 addDuration = 300
@@ -58,19 +59,29 @@ class CharactersListFragment : Fragment() {
                 charactersListAdapter.updateCharacterList(it) }
         })
 
-//        viewModel.countryLoadError.observe(this, Observer { isError ->
+//        viewModel.characterLoadError.observe(viewLifecycleOwner, Observer { isError ->
 //            list_error.visibility = if(isError == "") View.GONE else View.VISIBLE
 //        })
-//
-//        viewModel.loading.observe(this, Observer { isLoading ->
-//            isLoading?.let {
-//                loading_view.visibility = if(it) View.VISIBLE else View.GONE
-//                if(it) {
+
+        viewModel.loading.observe(viewLifecycleOwner, Observer { isLoading ->
+            isLoading?.let {
+                characterListProgressBar.visibility = if(it) View.VISIBLE else View.GONE
+                if(it) {
 //                    list_error.visibility = View.GONE
-//                    countriesList.visibility = View.GONE
-//                }
-//            }
-//        })
+                    characterListRecyclerView.visibility = View.GONE
+                }
+            }
+        })
+    }
+
+    private fun getNumberOfRows(): Int {
+        val width = Resources.getSystem().getDisplayMetrics().widthPixels
+        val rows = when {
+            width < 1081 -> 1
+            width in 1081..2000 -> 2
+            else -> 3
+        }
+        return rows
     }
 
 }
