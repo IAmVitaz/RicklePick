@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.vitaz.ricklepick.R
 import com.vitaz.ricklepick.model.Character
+import com.vitaz.ricklepick.utils.loadImage
 import kotlinx.android.synthetic.main.item_character_list.view.*
 
 class CharacterListAdapter (var characters: ArrayList<Character>):
@@ -14,11 +15,12 @@ class CharacterListAdapter (var characters: ArrayList<Character>):
     fun updateCharacterList(newCharacters: List<Character>) {
         characters.clear()
         characters.addAll(newCharacters)
-        notifyDataSetChanged()
+        notifyItemRangeInserted(0, newCharacters.size-1)
+
     }
 
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
-//        private val imageView = view.imageView
+        private val imageView = view.imageView
         private val characterName = view.characterNameValue
         private val characterSpecies = view.characterSpeciesValue
         private val genderValue = view.characterGenderValue
@@ -28,6 +30,7 @@ class CharacterListAdapter (var characters: ArrayList<Character>):
             characterName.text = character.name
             characterSpecies.text = character.species
             genderValue.text = character.gender
+            imageView.loadImage(character.image)
 
 //            genderValue.loadImage(character.flag)
         }

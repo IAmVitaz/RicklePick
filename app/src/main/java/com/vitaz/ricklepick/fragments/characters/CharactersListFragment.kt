@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.vitaz.ricklepick.R
 import com.vitaz.ricklepick.adapters.CharacterListAdapter
 import com.vitaz.ricklepick.viewmodel.CharactersViewModel
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.android.synthetic.main.fragment_characters_list.*
 
 class CharactersListFragment : Fragment() {
@@ -38,6 +39,9 @@ class CharactersListFragment : Fragment() {
         characterListRecyclerView.apply {
             adapter = charactersListAdapter
             layoutManager = LinearLayoutManager(requireActivity())
+            itemAnimator = SlideInUpAnimator().apply{
+                addDuration = 300
+            }
         }
 
 

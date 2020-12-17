@@ -30,14 +30,12 @@ class CharactersViewModel: ViewModel() {
     private fun fetchCharacters() {
         loading.value = true
 
-        job = CoroutineScope(Dispatchers.IO ).launch {
+        job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
             val response = characterService.getAllCharacters()
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
                     charactersData.value = response.body()
                     characters.value = charactersData.value!!.results
-                    Log.i("INFO:", charactersData.value!!.results[1].name.toString())
-                    Log.i("INFO:", characters.value!![1].name.toString())
                     characterLoadError.value = null
                     loading.value = false
                 } else {
@@ -45,7 +43,6 @@ class CharactersViewModel: ViewModel() {
                 }
             }
         }
-
     }
 
     private fun onError(message: String) {
