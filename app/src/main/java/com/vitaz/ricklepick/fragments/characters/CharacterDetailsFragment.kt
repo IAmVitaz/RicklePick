@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.vitaz.ricklepick.R
@@ -48,7 +50,7 @@ class CharacterDetailsFragment : Fragment() {
         view.characterDetailsTypeValue.text = checkStringForNull(args.currentCharacter.type)
         view.characterDetailsOriginValue.text = checkStringForNull(args.currentCharacter.origin.name)
         view.characterDetailsLocationValue.text = checkStringForNull(args.currentCharacter.location.name)
-        view.characterDetailsGender.setImageResource(getGenderResourceId(args.currentCharacter.gender))
+        setGenderImage(args.currentCharacter.gender, view.characterDetailsGender)
     }
 
     private fun checkStringForNull(item: String?): String {
@@ -57,7 +59,7 @@ class CharacterDetailsFragment : Fragment() {
         } else "Unknown"
     }
 
-    private fun getGenderResourceId(gender: String?): Int {
+    private fun setGenderImage(gender: String?, image: ImageView) {
         var imageName: String = when (gender) {
             "Male" -> {
                 "png_mars"
@@ -67,7 +69,19 @@ class CharacterDetailsFragment : Fragment() {
             }
             else -> "png_questionmark"
         }
-        return  requireContext().resources.getIdentifier(imageName, "drawable", requireContext().packageName)
+        val imageID = requireContext().resources.getIdentifier(imageName, "drawable", requireContext().packageName)
+        image.setImageResource(imageID)
+
+        val color: Int = when (gender) {
+            "Male" -> {
+                R.color.blue
+            }
+            "Female" -> {
+                R.color.pink
+            }
+            else -> R.color.black
+        }
+        image.setColorFilter(ContextCompat.getColor(requireContext(), color), android.graphics.PorterDuff.Mode.SRC_IN);
     }
 
     private fun getNumberOfRows(): Int {
