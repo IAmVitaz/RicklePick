@@ -39,7 +39,7 @@
             app:layout_constraintGuide_percent="0.33" />
 
         <TextView
-            android:id="@+id/name"
+            android:id="@+id/episodeListINameValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Name:"
@@ -74,7 +74,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/gender"
             app:layout_constraintStart_toStartOf="@+id/gender"
-            app:layout_constraintTop_toBottomOf="@+id/name" />
+            app:layout_constraintTop_toBottomOf="@+id/episodeListINameValue" />
 
         <TextView
             android:id="@+id/characterSpeciesValue"

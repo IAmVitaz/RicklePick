@@ -54,7 +54,7 @@ class CharactersListFragment : Fragment() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)) {
-                    Toast.makeText(activity, "Unfortunately, UFO captured the rest of this API response :(", Toast.LENGTH_LONG).show()
+                    Toast.makeText(activity, "Unfortunately, the rest of this API response got lost in Dimension-137:(\nCronenbergs says hello!", Toast.LENGTH_LONG).show()
                     //ToDo add coroutine with api call to extend characterList
                 }
             }
@@ -88,7 +88,7 @@ class CharactersListFragment : Fragment() {
     }
 
     private fun getNumberOfRows(): Int {
-        val width = Resources.getSystem().getDisplayMetrics().widthPixels
+        val width = Resources.getSystem().displayMetrics.widthPixels
         val rows = when {
             width < 1081 -> 1
             width in 1081..2000 -> 2
