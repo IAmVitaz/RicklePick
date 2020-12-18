@@ -2,19 +2,20 @@ package com.vitaz.ricklepick.fragments.characters
 
 import android.content.res.Resources
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.vitaz.ricklepick.R
 import com.vitaz.ricklepick.adapters.CharacterListAdapter
 import com.vitaz.ricklepick.viewmodel.CharactersViewModel
-import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.android.synthetic.main.fragment_characters_list.*
+
 
 class CharactersListFragment : Fragment() {
 
@@ -42,10 +43,22 @@ class CharactersListFragment : Fragment() {
             adapter = charactersListAdapter
             layoutManager = StaggeredGridLayoutManager(getNumberOfRows(), StaggeredGridLayoutManager.VERTICAL)
 
-            itemAnimator = SlideInUpAnimator().apply{
-                addDuration = 300
-            }
+            // SlideInUpAnimator turns on nice animation for recyclerView, but crash the app when come back to the fragment works fine with  itemAnimator = null.
+            // ToDo investigate the animation issue
+            itemAnimator = null
+//            itemAnimator = SlideInUpAnimator().apply{
+//                addDuration = 300
+//            }
         }
+        characterListRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!recyclerView.canScrollVertically(1)) {
+                    Toast.makeText(activity, "Unfortunately, UFO captured the rest of this API response :(", Toast.LENGTH_LONG).show()
+                    //ToDo add coroutine with api call to extend characterList
+                }
+            }
+        })
 
 
         super.onViewCreated(view, savedInstanceState)
