@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.vitaz.ricklepick.model.Character
 import com.vitaz.ricklepick.model.CharacterData
 import com.vitaz.ricklepick.model.CharacterService
+import com.vitaz.ricklepick.model.Info
 import kotlinx.coroutines.*
 
 class CharactersViewModel: ViewModel() {
@@ -19,29 +20,39 @@ class CharactersViewModel: ViewModel() {
 
 
     val charactersData = MutableLiveData<CharacterData>()
+    val apiCallInfo = MutableLiveData<Info>()
     val characters = MutableLiveData<List<Character>>()
     val characterLoadError = MutableLiveData<String?>()
     val loading = MutableLiveData<Boolean>()
 
-    fun refresh() {
-        fetchCharacters()
+    var charactersList = mutableListOf<Character>()
+    var currentPage = 1
+    var totalPages = 1
+
+    fun downloadNextPageOfCharacters() {
+        fetchCharacters(currentPage)
+
     }
 
-    private fun fetchCharacters() {
+    private fun fetchCharacters(page: Int) {
         loading.value = true
 
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
-            val response = characterService.getAllCharacters()
+            val response = characterService.getAllCharacters(page)
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
                     charactersData.value = response.body()
-                    characters.value = charactersData.value!!.results
+                    apiCallInfo.value = charactersData.value!!.info
+                    totalPages = apiCallInfo.value!!.pages
+                    charactersList.addAll(charactersData.value!!.results)
+                    characters.value = charactersList
                     characterLoadError.value = null
                     loading.value = false
                 } else {
                     onError("Error: ${response.message()}")
                 }
             }
+            currentPage++
         }
     }
 

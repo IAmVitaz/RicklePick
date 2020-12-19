@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.vitaz.ricklepick.R
 import com.vitaz.ricklepick.adapters.CharacterListAdapter
 import com.vitaz.ricklepick.viewmodel.CharactersViewModel
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.android.synthetic.main.fragment_characters_list.*
 
 
@@ -29,7 +30,7 @@ class CharactersListFragment : Fragment() {
     ): View? {
 
         viewModel = ViewModelProviders.of(this).get(CharactersViewModel::class.java)
-        viewModel.refresh()
+        viewModel.downloadNextPageOfCharacters()
 
         observeViewModel()
 
@@ -45,22 +46,24 @@ class CharactersListFragment : Fragment() {
 
             // SlideInUpAnimator turns on nice animation for recyclerView, but crash the app when come back to the fragment works fine with  itemAnimator = null.
             // ToDo investigate the animation issue
-            itemAnimator = null
-//            itemAnimator = SlideInUpAnimator().apply{
-//                addDuration = 300
-//            }
+//            itemAnimator = null
+            itemAnimator = SlideInUpAnimator().apply{
+                addDuration = 300
+            }
         }
         characterListRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)) {
-                    Toast.makeText(activity, "Unfortunately, the rest of this API response got lost in Dimension-137:(\nCronenbergs says hello!", Toast.LENGTH_LONG).show()
-                    //ToDo add coroutine with api call to extend characterList
+                    if (viewModel.currentPage <= viewModel.totalPages) {
+                        Toast.makeText(activity, "Loading page ${viewModel.currentPage} of total ${viewModel.totalPages}", Toast.LENGTH_SHORT).show()
+                        viewModel.downloadNextPageOfCharacters()
+                    } else {
+                        Toast.makeText(activity, "Congratulations! You have reached the very End of this Rabbit Hole!", Toast.LENGTH_LONG).show()
+                    }
                 }
             }
         })
-
-
         super.onViewCreated(view, savedInstanceState)
     }
 
@@ -79,10 +82,6 @@ class CharactersListFragment : Fragment() {
         viewModel.loading.observe(viewLifecycleOwner, Observer { isLoading ->
             isLoading?.let {
                 characterListProgressBar.visibility = if(it) View.VISIBLE else View.GONE
-                if(it) {
-//                    list_error.visibility = View.GONE
-                    characterListRecyclerView.visibility = View.GONE
-                }
             }
         })
     }

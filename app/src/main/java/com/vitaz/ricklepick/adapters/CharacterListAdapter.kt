@@ -17,8 +17,8 @@ class CharacterListAdapter (var characters: ArrayList<Character>):
     fun updateCharacterList(newCharacters: List<Character>) {
         characters.clear()
         characters.addAll(newCharacters)
-        notifyItemRangeInserted(0, characters.size-1)
-        //notifyDataSetChanged()
+//        notifyItemRangeInserted(0, characters.size-1)
+        notifyDataSetChanged()
 
     }
 
