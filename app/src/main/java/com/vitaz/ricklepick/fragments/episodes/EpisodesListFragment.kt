@@ -27,7 +27,7 @@ class EpisodesListFragment : Fragment() {
     ): View? {
 
         viewModel = ViewModelProviders.of(this).get(EpisodesViewModel::class.java)
-        viewModel.refresh()
+        viewModel.downloadNextPageOfEpisodes()
 
         observeViewModel()
 
@@ -41,6 +41,7 @@ class EpisodesListFragment : Fragment() {
             adapter = episodesListAdapter
             layoutManager = StaggeredGridLayoutManager(getNumberOfRows(), StaggeredGridLayoutManager.VERTICAL)
 
+
             // SlideInUpAnimator turns on nice animation for recyclerView, but crash the app when come back to the fragment works fine with  itemAnimator = null.
             // ToDo investigate the animation issue
             itemAnimator = null
@@ -52,8 +53,12 @@ class EpisodesListFragment : Fragment() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)) {
-                    Toast.makeText(activity, "Unfortunately, the rest of this API response got lost in Replacement dimension:(\nBut still nice try!", Toast.LENGTH_LONG).show()
-                    //ToDo add coroutine with api call to extend characterList
+                    if (viewModel.currentPage <= viewModel.totalPages) {
+                        Toast.makeText(activity, "Loading page ${viewModel.currentPage} of total ${viewModel.totalPages}", Toast.LENGTH_SHORT).show()
+                        viewModel.downloadNextPageOfEpisodes()
+                    } else {
+                        Toast.makeText(activity, "Here is the end of the list.\nYeah, I also wish to have more episodes.", Toast.LENGTH_LONG).show()
+                    }
                 }
             }
         })
@@ -76,10 +81,6 @@ class EpisodesListFragment : Fragment() {
         viewModel.loading.observe(viewLifecycleOwner, Observer { isLoading ->
             isLoading?.let {
                 episodesListProgressBar.visibility = if(it) View.VISIBLE else View.GONE
-                if(it) {
-//                    list_error.visibility = View.GONE
-                    episodesListRecyclerView.visibility = View.GONE
-                }
             }
         })
     }

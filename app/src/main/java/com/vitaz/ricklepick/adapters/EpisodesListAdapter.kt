@@ -15,8 +15,8 @@ class EpisodesListAdapter (var episodes: ArrayList<Episode>):
     fun updateCharacterList(newEpisodes: List<Episode>) {
         episodes.clear()
         episodes.addAll(newEpisodes)
-        notifyItemRangeInserted(0, episodes.size-1)
-        //notifyDataSetChanged()
+//        notifyItemRangeInserted(0, episodes.size-1)
+        notifyDataSetChanged()
     }
 
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.vitaz.ricklepick.model.Episode
 import com.vitaz.ricklepick.model.EpisodesData
 import com.vitaz.ricklepick.model.EpisodesService
+import com.vitaz.ricklepick.model.Info
 import kotlinx.coroutines.*
 
 class EpisodesViewModel: ViewModel() {
@@ -17,29 +18,38 @@ class EpisodesViewModel: ViewModel() {
     }
 
     val episodesData = MutableLiveData<EpisodesData>()
+    val apiCallInfo = MutableLiveData<Info>()
     val episodes = MutableLiveData<List<Episode>>()
     val episodesLoadError = MutableLiveData<String?>()
     val loading = MutableLiveData<Boolean>()
 
-    fun refresh() {
-        fetchEpisodes()
+    var episodeList = mutableListOf<Episode>()
+    var currentPage = 1
+    var totalPages = 1
+
+    fun downloadNextPageOfEpisodes() {
+        fetchEpisodes(currentPage)
     }
 
-    private fun fetchEpisodes() {
+    private fun fetchEpisodes(page: Int) {
         loading.value = true
 
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
-            val response = episodesService.getAllEpisodes()
+            val response = episodesService.getAllEpisodes(page)
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
                     episodesData.value = response.body()
-                    episodes.value = episodesData.value!!.results
+                    apiCallInfo.value = episodesData.value!!.info
+                    totalPages = apiCallInfo.value!!.pages
+                    episodeList.addAll(episodesData.value!!.results)
+                    episodes.value = episodeList
                     episodesLoadError.value = null
                     loading.value = false
                 } else {
                     onError("Error: ${response.message()}")
                 }
             }
+            currentPage++
         }
     }
 

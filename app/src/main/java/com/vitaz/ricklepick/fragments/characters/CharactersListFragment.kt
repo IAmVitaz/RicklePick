@@ -46,10 +46,10 @@ class CharactersListFragment : Fragment() {
 
             // SlideInUpAnimator turns on nice animation for recyclerView, but crash the app when come back to the fragment works fine with  itemAnimator = null.
             // ToDo investigate the animation issue
-//            itemAnimator = null
-            itemAnimator = SlideInUpAnimator().apply{
-                addDuration = 300
-            }
+            itemAnimator = null
+//            itemAnimator = SlideInUpAnimator().apply{
+//                addDuration = 300
+//            }
         }
         characterListRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
