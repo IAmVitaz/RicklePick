@@ -8,17 +8,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.vitaz.ricklepick.R
 import com.vitaz.ricklepick.adapters.CharacterDetailsEpisodeListAdapter
 import com.vitaz.ricklepick.utils.loadImage
+import com.vitaz.ricklepick.viewmodel.CharacterDetailsViewModel
 import kotlinx.android.synthetic.main.fragment_character_details.*
-import kotlinx.android.synthetic.main.fragment_character_details.view.*
 
 class CharacterDetailsFragment : Fragment() {
 
     private val args by navArgs<CharacterDetailsFragmentArgs>()
+    lateinit var viewModel: CharacterDetailsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,29 +31,58 @@ class CharacterDetailsFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_character_details, container, false)
 
+        viewModel = ViewModelProviders.of(this).get(CharacterDetailsViewModel::class.java)
+        viewModel.characterId = args.characterId
+        viewModel.showCharacterDetails()
+
+        observeViewModel()
+
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //expand recyclerview and disable scrolling. works with NestedScrollView
-        characterDetailsEpisodeRecyclerView.isNestedScrollingEnabled = false
-        //populate episode recyclerview
+    }
 
-        characterDetailsEpisodeRecyclerView.apply {
-            adapter = CharacterDetailsEpisodeListAdapter(args.currentCharacter.episode)
-            layoutManager = StaggeredGridLayoutManager(getNumberOfRows(), StaggeredGridLayoutManager.VERTICAL)
-        }
+    fun observeViewModel() {
+        viewModel.character.observe(viewLifecycleOwner, Observer {character ->
+            character?.let {
+                characterDetailsWindow.visibility = View.INVISIBLE
+                characterDetailsProgressBar.visibility = View.VISIBLE
 
-        view.characterDetailsImageView.loadImage(args.currentCharacter.image)
-        view.characterDetailsNameValue.text = checkStringForNull(args.currentCharacter.name)
-        view.characterDetailsStatusValue.text = checkStringForNull(args.currentCharacter.status)
-        view.characterDetailsSpeciesValue.text = checkStringForNull(args.currentCharacter.species)
-        view.characterDetailsTypeValue.text = checkStringForNull(args.currentCharacter.type)
-        view.characterDetailsOriginValue.text = checkStringForNull(args.currentCharacter.origin.name)
-        view.characterDetailsLocationValue.text = checkStringForNull(args.currentCharacter.location.name)
-        setGenderImage(args.currentCharacter.gender, view.characterDetailsGender)
+                //expand recyclerview and disable scrolling. works with NestedScrollView
+                characterDetailsEpisodeRecyclerView.isNestedScrollingEnabled = false
+
+                //populate episode recyclerview
+                characterDetailsEpisodeRecyclerView.apply {
+                    adapter = CharacterDetailsEpisodeListAdapter(viewModel.character.value!!.episode)
+                    layoutManager = StaggeredGridLayoutManager(getNumberOfRows(), StaggeredGridLayoutManager.VERTICAL)
+                }
+
+                //show character details data received
+                characterDetailsImageView.loadImage(viewModel.character.value!!.image)
+                characterDetailsNameValue.text = checkStringForNull(viewModel.character.value!!.name)
+                characterDetailsStatusValue.text = checkStringForNull(viewModel.character.value!!.status)
+                characterDetailsSpeciesValue.text = checkStringForNull(viewModel.character.value!!.species)
+                characterDetailsTypeValue.text = checkStringForNull(viewModel.character.value!!.type)
+                characterDetailsOriginValue.text = checkStringForNull(viewModel.character.value!!.origin.name)
+                characterDetailsLocationValue.text = checkStringForNull(viewModel.character.value!!.location.name)
+                setGenderImage(viewModel.character.value!!.gender, characterDetailsGender)
+            }
+        })
+
+//        viewModel.characterLoadError.observe(viewLifecycleOwner, Observer { isError ->
+//            list_error.visibility = if(isError == "") View.GONE else View.VISIBLE
+//        })
+
+        viewModel.loading.observe(viewLifecycleOwner, Observer { isLoading ->
+            isLoading?.let {
+                characterDetailsWindow.visibility = if(it) View.INVISIBLE else View.VISIBLE
+                characterDetailsProgressBar.visibility = if(it) View.VISIBLE else View.GONE
+
+            }
+        })
     }
 
     private fun checkStringForNull(item: String?): String {

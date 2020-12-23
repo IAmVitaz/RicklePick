@@ -14,4 +14,12 @@ object CharacterService {
             .build()
             .create(CharactersAPI::class.java)
     }
+
+    fun getSpecificCharacter(): CharactersAPI {
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(CharactersAPI::class.java)
+    }
 }

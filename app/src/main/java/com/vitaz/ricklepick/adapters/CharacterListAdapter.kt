@@ -49,7 +49,7 @@ class CharacterListAdapter (var characters: ArrayList<Character>):
         holder.bind(characters[position])
 
         holder.itemView.characterListRowBackground.setOnClickListener {
-            val action = CharactersListFragmentDirections.actionCharactersListFragmentToCharacterDetailsFragment(characters[position])
+            val action = CharactersListFragmentDirections.actionCharactersListFragmentToCharacterDetailsFragment(position+1)
             holder.itemView.findNavController().navigate(action)
         }
 

@@ -71,8 +71,8 @@
             android:id="@+id/action_characterDetailsFragment_to_episodeDetailsFragment"
             app:destination="@id/episodeDetailsFragment" />
         <argument
-            android:name="currentCharacter"
-            app:argType="com.vitaz.ricklepick.model.Character" />
+            android:name="characterId"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/locationDetailsFragment"
