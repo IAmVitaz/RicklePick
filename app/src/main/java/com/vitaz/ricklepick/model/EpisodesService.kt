@@ -14,4 +14,12 @@ object EpisodesService {
             .build()
             .create(EpisodesAPI::class.java)
     }
+
+    fun getSpecificEpisode(): EpisodesAPI {
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(EpisodesAPI::class.java)
+    }
 }

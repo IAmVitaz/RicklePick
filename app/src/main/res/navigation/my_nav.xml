@@ -97,5 +97,8 @@
         <action
             android:id="@+id/action_episodeDetailsFragment_to_characterDetailsFragment"
             app:destination="@id/characterDetailsFragment" />
+        <argument
+            android:name="episodeId"
+            app:argType="integer" />
     </fragment>
 </navigation>
