@@ -1,10 +1,12 @@
 package com.vitaz.ricklepick.fragments.episodes
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.navArgs
@@ -12,6 +14,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.vitaz.ricklepick.R
 import com.vitaz.ricklepick.viewmodel.EpisodeDetailsViewModel
 import kotlinx.android.synthetic.main.fragment_episode_details.*
+import kotlin.math.log
 
 class EpisodeDetailsFragment : Fragment() {
 
@@ -53,7 +56,7 @@ class EpisodeDetailsFragment : Fragment() {
                 episodeDetailsEpisodeValue.text = viewModel.episode.value!!.episode
                 episodeDetailsNameValue.text = viewModel.episode.value!!.name
                 episodeDetailsAirValue.text = viewModel.episode.value!!.air_date
-//                setGenderImage(viewModel.character.value!!.gender, characterDetailsGender)
+                setSeasonImage(viewModel.episode.value!!.episode!!, episodeDetailsSeasonCover)
             }
         })
 
@@ -67,6 +70,17 @@ class EpisodeDetailsFragment : Fragment() {
                 episodeDetailsProgressBar.visibility = if(it) View.VISIBLE else View.GONE
             }
         })
+    }
+
+    private fun setSeasonImage(episode: String, image: ImageView) {
+        val seasonNumber = episode.take(3).takeLast(1)
+        val seasonImageName = "season_$seasonNumber"
+        try {
+            val imageID = requireContext().resources.getIdentifier(seasonImageName, "drawable", requireContext().packageName)
+            image.setImageResource(imageID)
+        } catch (e: Exception) {
+            Log.i("Error", "Exception while trying to set season image: $e")
+        }
     }
 
 }
