@@ -1,5 +1,6 @@
 package com.vitaz.ricklepick.fragments.episodes
 
+import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,6 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.vitaz.ricklepick.R
+import com.vitaz.ricklepick.adapters.EpisodeDetailsCharacterListAdapter
 import com.vitaz.ricklepick.viewmodel.EpisodeDetailsViewModel
 import kotlinx.android.synthetic.main.fragment_episode_details.*
 import kotlin.math.log
@@ -44,13 +46,13 @@ class EpisodeDetailsFragment : Fragment() {
                 episodeDetailsProgressBar.visibility = View.VISIBLE
 
                 //expand recyclerview and disable scrolling. works with NestedScrollView
-//                characterDetailsEpisodeRecyclerView.isNestedScrollingEnabled = false
+                episodeDetailsCharacterRecyclerView.isNestedScrollingEnabled = false
 
                 //populate episode recyclerview
-//                characterDetailsEpisodeRecyclerView.apply {
-//                    adapter = CharacterDetailsEpisodeListAdapter(viewModel.character.value!!.episode)
-//                    layoutManager = StaggeredGridLayoutManager(getNumberOfRows(), StaggeredGridLayoutManager.VERTICAL)
-//                }
+                episodeDetailsCharacterRecyclerView.apply {
+                    adapter = EpisodeDetailsCharacterListAdapter(viewModel.episode.value!!.characters)
+                    layoutManager = StaggeredGridLayoutManager(getNumberOfRows(), StaggeredGridLayoutManager.VERTICAL)
+                }
 
                 //show character details data received
                 episodeDetailsEpisodeValue.text = viewModel.episode.value!!.episode
@@ -81,6 +83,17 @@ class EpisodeDetailsFragment : Fragment() {
         } catch (e: Exception) {
             Log.i("Error", "Exception while trying to set season image: $e")
         }
+    }
+
+    private fun getNumberOfRows(): Int {
+        val width = Resources.getSystem().getDisplayMetrics().widthPixels
+        val rows = when {
+            width < 500 -> 1
+            width in 500..999 -> 2
+            width in 1000..1999 -> 3
+            else -> 4
+        }
+        return rows
     }
 
 }

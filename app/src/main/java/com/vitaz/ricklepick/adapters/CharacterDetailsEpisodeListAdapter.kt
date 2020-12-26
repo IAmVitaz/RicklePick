@@ -1,17 +1,11 @@
 package com.vitaz.ricklepick.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.ListView
 import androidx.recyclerview.widget.RecyclerView
 import com.vitaz.ricklepick.R
-import com.vitaz.ricklepick.model.Character
-import com.vitaz.ricklepick.utils.loadImage
 import kotlinx.android.synthetic.main.item_character_details_episode.view.*
-import kotlinx.android.synthetic.main.item_character_list.view.*
 
 class CharacterDetailsEpisodeListAdapter(var episodes: List<String>):
     RecyclerView.Adapter<CharacterDetailsEpisodeListAdapter.ViewHolder>() {

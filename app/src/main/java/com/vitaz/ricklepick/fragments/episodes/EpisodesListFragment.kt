@@ -88,8 +88,8 @@ class EpisodesListFragment : Fragment() {
     private fun getNumberOfRows(): Int {
         val width = Resources.getSystem().displayMetrics.widthPixels
         val rows = when {
-            width < 1081 -> 1
-            width in 1081..2000 -> 2
+            width < 1441 -> 1
+            width in 1441..3121 -> 2
             else -> 3
         }
         return rows
