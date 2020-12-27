@@ -5,15 +5,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.vitaz.ricklepick.R
+import com.vitaz.ricklepick.model.Character
+import com.vitaz.ricklepick.utils.loadImage
 import kotlinx.android.synthetic.main.item_episode_details_character.view.*
 
-class EpisodeDetailsCharacterListAdapter(var characters: List<String>):
+class EpisodeDetailsCharacterListAdapter(var characters: List<Character>):
     RecyclerView.Adapter<EpisodeDetailsCharacterListAdapter.ViewHolder>() {
 
     class ViewHolder (view: View): RecyclerView.ViewHolder(view) {
         private val characterName = view.characterNameValue
-        fun bind(episode: String) {
-            characterName.text = episode
+        private val characterImage = view.characterImage
+        fun bind(character: Character) {
+            characterName.text = character.name
+            characterImage.loadImage(character.image)
         }
     }
 

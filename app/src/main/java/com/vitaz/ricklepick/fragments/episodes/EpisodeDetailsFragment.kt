@@ -45,20 +45,13 @@ class EpisodeDetailsFragment : Fragment() {
                 episodeDetailsWindow.visibility = View.INVISIBLE
                 episodeDetailsProgressBar.visibility = View.VISIBLE
 
-                //expand recyclerview and disable scrolling. works with NestedScrollView
-                episodeDetailsCharacterRecyclerView.isNestedScrollingEnabled = false
-
-                //populate episode recyclerview
-                episodeDetailsCharacterRecyclerView.apply {
-                    adapter = EpisodeDetailsCharacterListAdapter(viewModel.episode.value!!.characters)
-                    layoutManager = StaggeredGridLayoutManager(getNumberOfRows(), StaggeredGridLayoutManager.VERTICAL)
-                }
-
                 //show character details data received
                 episodeDetailsEpisodeValue.text = viewModel.episode.value!!.episode
                 episodeDetailsNameValue.text = viewModel.episode.value!!.name
                 episodeDetailsAirValue.text = viewModel.episode.value!!.air_date
                 setSeasonImage(viewModel.episode.value!!.episode!!, episodeDetailsSeasonCover)
+
+                viewModel.showCharactersList()
             }
         })
 
@@ -70,6 +63,21 @@ class EpisodeDetailsFragment : Fragment() {
             isLoading?.let {
                 episodeDetailsWindow.visibility = if(it) View.INVISIBLE else View.VISIBLE
                 episodeDetailsProgressBar.visibility = if(it) View.VISIBLE else View.GONE
+            }
+        })
+
+        viewModel.isCharacterLoadingFinished.observe(viewLifecycleOwner, Observer { isFinished ->
+            isFinished?.let {
+                episodeDetailsCharacterListProgressBar.visibility = if(it) View.INVISIBLE else View.VISIBLE
+
+                //expand recyclerview and disable scrolling. works with NestedScrollView
+                episodeDetailsCharacterRecyclerView.isNestedScrollingEnabled = false
+
+                //populate episode recyclerview
+                episodeDetailsCharacterRecyclerView.apply {
+                    adapter = EpisodeDetailsCharacterListAdapter(viewModel.charactersList)
+                    layoutManager = StaggeredGridLayoutManager(getNumberOfRows(), StaggeredGridLayoutManager.VERTICAL)
+                }
             }
         })
     }
@@ -88,9 +96,9 @@ class EpisodeDetailsFragment : Fragment() {
     private fun getNumberOfRows(): Int {
         val width = Resources.getSystem().getDisplayMetrics().widthPixels
         val rows = when {
-            width < 500 -> 1
-            width in 500..999 -> 2
-            width in 1000..1999 -> 3
+            width < 700 -> 1
+            width in 700..1200 -> 2
+            width in 1200..1999 -> 3
             else -> 4
         }
         return rows
