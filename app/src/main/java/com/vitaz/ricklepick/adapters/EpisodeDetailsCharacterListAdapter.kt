@@ -3,8 +3,10 @@ package com.vitaz.ricklepick.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.vitaz.ricklepick.R
+import com.vitaz.ricklepick.fragments.episodes.EpisodeDetailsFragmentDirections
 import com.vitaz.ricklepick.model.Character
 import com.vitaz.ricklepick.utils.loadImage
 import kotlinx.android.synthetic.main.item_episode_details_character.view.*
@@ -29,5 +31,10 @@ class EpisodeDetailsCharacterListAdapter(var characters: List<Character>):
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(characters[position])
+
+        holder.itemView.characterListRowBackground.setOnClickListener {
+            val action = EpisodeDetailsFragmentDirections.actionEpisodeDetailsFragmentToCharacterDetailsFragment(characters[position].id!!)
+            holder.itemView.findNavController().navigate(action)
+        }
     }
 }
