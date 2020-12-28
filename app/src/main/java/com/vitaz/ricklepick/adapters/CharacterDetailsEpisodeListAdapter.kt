@@ -20,6 +20,7 @@ class CharacterDetailsEpisodeListAdapter(var episodes: List<String>):
         private val episodeName = view.episodeNameValue
         fun bind(episode: String) {
             episodeName.text = episode
+            episodeName.paint?.isUnderlineText = true
         }
     }
 

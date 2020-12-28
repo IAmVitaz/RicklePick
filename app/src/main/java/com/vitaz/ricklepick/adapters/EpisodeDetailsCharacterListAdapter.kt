@@ -19,6 +19,7 @@ class EpisodeDetailsCharacterListAdapter(var characters: List<Character>):
         private val characterImage = view.characterImage
         fun bind(character: Character) {
             characterName.text = character.name
+            characterName.paint?.isUnderlineText = true
             characterImage.loadImage(character.image)
         }
     }
