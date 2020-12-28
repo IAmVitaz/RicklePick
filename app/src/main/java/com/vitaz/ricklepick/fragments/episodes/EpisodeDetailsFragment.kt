@@ -46,6 +46,7 @@ class EpisodeDetailsFragment : Fragment() {
                 episodeDetailsProgressBar.visibility = View.VISIBLE
 
                 //show character details data received
+                episodeDetailsEpisodeOverallValue.text = viewModel.episode.value!!.id.toString()
                 episodeDetailsEpisodeValue.text = viewModel.episode.value!!.episode
                 episodeDetailsNameValue.text = viewModel.episode.value!!.name
                 episodeDetailsAirValue.text = viewModel.episode.value!!.air_date

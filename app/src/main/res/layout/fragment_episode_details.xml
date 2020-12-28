@@ -42,6 +42,44 @@
                 android:layout_height="wrap_content">
 
                 <TextView
+                    android:id="@+id/episodeDetailsEpisode2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:text="# Overall:"
+                    android:textColor="@color/colorAccent"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/episodeDetailsEpisodeOverallValue"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="right"
+                    android:text="Unknown"
+                    android:textColor="@color/colorAccent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/guideline4"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/horisontalLine9"
+                    android:layout_width="0dp"
+                    android:layout_height="1px"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@color/colorAccent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/episodeDetailsEpisodeOverallValue" />
+
+                <TextView
                     android:id="@+id/episodeDetailsEpisode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -51,7 +89,7 @@
                     android:textColor="@color/colorAccent"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@+id/horisontalLine9" />
 
                 <TextView
                     android:id="@+id/episodeDetailsEpisodeValue"
@@ -64,7 +102,7 @@
                     android:textColor="@color/colorAccent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guideline4"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@+id/horisontalLine9" />
 
                 <View
                     android:id="@+id/horisontalLine6"
