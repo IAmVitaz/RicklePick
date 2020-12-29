@@ -1,13 +1,13 @@
 package com.vitaz.ricklepick.fragments.characters
 
+import android.app.AlertDialog
+import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.navArgs
@@ -17,6 +17,7 @@ import com.vitaz.ricklepick.adapters.CharacterDetailsEpisodeListAdapter
 import com.vitaz.ricklepick.utils.loadImage
 import com.vitaz.ricklepick.viewmodel.CharacterDetailsViewModel
 import kotlinx.android.synthetic.main.fragment_character_details.*
+
 
 class CharacterDetailsFragment : Fragment() {
 
@@ -30,6 +31,9 @@ class CharacterDetailsFragment : Fragment() {
 
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_character_details, container, false)
+
+        //Set Menu
+        setHasOptionsMenu(true)
 
         viewModel = ViewModelProviders.of(this).get(CharacterDetailsViewModel::class.java)
         viewModel.characterId = args.characterId
@@ -124,6 +128,29 @@ class CharacterDetailsFragment : Fragment() {
             else -> 4
         }
         return rows
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.back_home_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        if(item.itemId == R.id.menu_home) {
+            confirmRemoval()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun confirmRemoval() {
+        val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialog)
+        builder.setPositiveButton("Yes") { _, _ ->
+            startActivity(Intent.makeRestartActivityTask(requireActivity().intent.component));
+        }
+        builder.setNegativeButton("No") { _, _ ->}
+        builder.setTitle("Back to title screen?")
+        builder.setMessage("Are you sure you want to go back to title screen?")
+        builder.create().show()
     }
 
 }

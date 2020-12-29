@@ -1,12 +1,12 @@
 package com.vitaz.ricklepick.fragments.episodes
 
+import android.app.AlertDialog
+import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -29,6 +29,9 @@ class EpisodeDetailsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_episode_details, container, false)
+
+        //Set Menu
+        setHasOptionsMenu(true)
 
         viewModel = ViewModelProviders.of(this).get(EpisodeDetailsViewModel::class.java)
         viewModel.episodeId = args.episodeId
@@ -103,6 +106,29 @@ class EpisodeDetailsFragment : Fragment() {
             else -> 4
         }
         return rows
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.back_home_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        if(item.itemId == R.id.menu_home) {
+            confirmRemoval()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun confirmRemoval() {
+        val builder = AlertDialog.Builder(requireContext(), R.style.AlertDialog)
+        builder.setPositiveButton("Yes") { _, _ ->
+            startActivity(Intent.makeRestartActivityTask(requireActivity().intent.component));
+        }
+        builder.setNegativeButton("No") { _, _ ->}
+        builder.setTitle("Back to title screen?")
+        builder.setMessage("Are you sure you want to go back to title screen?")
+        builder.create().show()
     }
 
 }
